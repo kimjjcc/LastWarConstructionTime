@@ -6,11 +6,18 @@ from datetime import datetime, timedelta
 # ----------------------
 st.set_page_config(
     page_title="Last War 건설 시간 계산기",
-    page_icon="🏗️",
+    page_icon="lastwarg.png",   # ✅ 레포에 있는 로컬 이미지
     layout="centered"
 )
 
-st.title("🏗️ Last War 건설 시간 계산기")
+col_icon, col_title = st.columns([1, 6])
+
+with col_icon:
+    st.image("lastwarg.png", width=64)
+
+with col_title:
+    st.markdown("## Last War 건설 시간 계산기")
+
 st.caption("원하는 건물과 본인의 건물가속률을 입력하면 예상완료 시간 확인!!")
 
 st.divider()
@@ -168,6 +175,7 @@ st.info(
     "⚠️ 게임 내 UI에 표시되는 가속 수치와 실제 적용 가속은 다를 수 있습니다.\n"
     "건설은 시작 시점 기준으로 계산됩니다."
 )
+
 
 
 
