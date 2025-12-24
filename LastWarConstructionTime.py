@@ -314,8 +314,20 @@ st.markdown("<p style='font-size:14px; color:gray; margin-bottom:5px;'>* 나의 
 col_speed, col_mayor = st.columns(2)
 
 with col_speed:
-    st.markdown("<p style='font-size:20px; font-weight:bold; margin:3px;'>나의 건설 속도</p>", unsafe_allow_html=True)
-    my_speed = st.number_input("", 0.0, 500.0, 0.0, 0.1, label_visibility="collapsed")
+    st.markdown(
+        "<p style='font-size:20px; font-weight:bold; margin:3px;'>나의 건설 속도</p>",
+        unsafe_allow_html=True
+    )
+    my_speed = st.number_input(
+        "",
+        min_value=0.0,
+        max_value=500.0,
+        value=None,                     # ← 핵심
+        step=0.1,
+        placeholder="예: 120.5",
+        label_visibility="collapsed"
+    )
+
 
 with col_mayor:
     st.markdown("<p style='font-size:20px; font-weight:bold; margin:3px;'>장관 가속</p>", unsafe_allow_html=True)
@@ -348,6 +360,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
