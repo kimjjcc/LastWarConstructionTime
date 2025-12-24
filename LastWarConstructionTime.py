@@ -25,10 +25,16 @@ st.set_page_config(
     layout="centered"
 )
 
-st.image("lastwarg.png", width=55)
-st.markdown("## Last War 건설 시간 계산기")
+# 이미지와 제목을 같은 줄에 배치
+col1, col2 = st.columns([1, 8])
+with col1:
+    st.image("lastwarg.png", width=55)
+with col2:
+    st.markdown("## Last War 건설 시간 계산기")
+
 st.caption("건물 업그레이드 시간 · 자원 · 완료 시각 계산")
 st.divider()
+
 
 # ----------------------
 # 데이터
@@ -56,7 +62,7 @@ BUILDING_DATA = {
         "28 → 29": {"time": (78,3,46,37),"res": (1000,1000,330),"req": ("과학센터28","탱크센터28")},
         "29 → 30": {"time": (101,14,30,37),"res": (1400,1400,460),"req": ("과학센터29","연병장29")},
     },
-    "과학기술센터(Tech Center)": {
+    "제1테크센터(Tech Center)": {
         "10 → 11": {"time": (0,6,30,0), "res": (1.6,1.6,0.52)},
         "11 → 12": {"time": (0,8,23,49), "res": (2.8,2.8,0.89)},
         "12 → 13": {"time": (0,10,54,58), "res": (3.1,3.1,0.98)},
@@ -269,6 +275,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
