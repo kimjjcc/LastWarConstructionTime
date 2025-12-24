@@ -253,14 +253,10 @@ with col_building:
     )
 
 with col_level:
-    col_icon, col_title = st.columns([1, 4])
-    with col_icon:
-        st.image("level-up.png", width=24)
-    with col_title:
-        st.markdown(
-            "<p style='font-size:25px; font-weight:bold; margin:3px; padding-top:4px;'>레벨 구간</p>",
-            unsafe_allow_html=True
-        )
+    st.markdown(
+        "<p style='font-size:25px; font-weight:bold; margin:3px;'>레벨 구간</p>",
+        unsafe_allow_html=True
+    )
     level = st.selectbox(
         "",
         list(BUILDING_DATA[building].keys())[::-1],
@@ -268,9 +264,9 @@ with col_level:
         label_visibility="collapsed"
     )
 
-
 data = BUILDING_DATA[building][level]
 d, h, m, s = data["time"]
+
 
 
 # ----------------------
@@ -322,6 +318,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
