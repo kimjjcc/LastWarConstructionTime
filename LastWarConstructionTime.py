@@ -318,24 +318,35 @@ def close_modal():
     st.session_state.show_modal = False
 
 with col_speed:
-    # 텍스트와 버튼을 같은 줄에 배치
-    text_col, btn_col = st.columns([4, 1])
-    with text_col:
-        st.markdown("<p style='font-size:20px; font-weight:bold; margin:3px;'>나의 건설 속도</p>", unsafe_allow_html=True)
-    with btn_col:
+    # 텍스트와 버튼을 같은 줄에 배치, 버튼 바로 옆
+    row = st.columns([4, 1])
+    with row[0]:
+        st.markdown("<p style='font-size:20px; font-weight:bold; margin:3px; display:inline;'>나의 건설 속도</p>", unsafe_allow_html=True)
+    with row[1]:
         st.button("확인방법", on_click=open_modal)
 
     # 숫자 입력
     my_speed = st.number_input("", 0.0, 500.0, 0.0, 0.1, label_visibility="collapsed")
 
-# 모달 흉내 (중앙)
+# 모달 흉내 (중앙, 반투명 배경)
 if st.session_state.show_modal:
     with st.container():
+        # 배경 레이어
+        st.markdown(
+            """
+            <div style='position:fixed; top:0; left:0; width:100%; height:100%;
+                        background-color: rgba(0,0,0,0.5); z-index:9998;'>
+            </div>
+            """, unsafe_allow_html=True
+        )
+        # 팝업 박스
         st.markdown(
             """
             <div style='position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-                        background-color:white; border:2px solid gray; padding:15px; z-index:9999;'>
-            """, unsafe_allow_html=True)
+                        background-color:white; border:2px solid gray; padding:15px; z-index:9999;
+                        max-width:90%; text-align:center;'>
+            """, unsafe_allow_html=True
+        )
         st.image("Constructionspeed.png", use_column_width=True)
         st.button("닫기", on_click=close_modal)
         st.markdown("</div>", unsafe_allow_html=True)
@@ -352,6 +363,7 @@ with col_mayor:
 
 
 
+
 if st.button("🚀 계산하기", use_container_width=True):
     base_sec = d*86400 + h*3600 + m*60 + s
     final_sec = base_sec / (1 + (my_speed + mayor)/100)
@@ -365,6 +377,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
