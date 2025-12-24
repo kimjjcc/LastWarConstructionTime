@@ -3,6 +3,9 @@ from datetime import datetime, timedelta
 import re
 import base64
 
+if "show_speed_popup" not in st.session_state:
+    st.session_state.show_speed_popup = False
+
 # ----------------------
 # 유틸
 # ----------------------
@@ -349,6 +352,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
