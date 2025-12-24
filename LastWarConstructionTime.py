@@ -301,9 +301,12 @@ if reqs:
         for r in reqs:
             st.markdown(f"- {add_space(r)}")
 
+
+# ----------------------
+# 가속 계산
+# ----------------------
 import streamlit as st
 
-# 처음 한 번만
 if "show_speed_image" not in st.session_state:
     st.session_state.show_speed_image = False
 
@@ -313,21 +316,23 @@ st.subheader("⚡ 건설 가속")
 col_speed, col_mayor = st.columns(2)
 
 with col_speed:
-    col_title, col_btn = st.columns([3, 1])
+    # 제목 + 버튼을 한 줄에 배치
+    left, right = st.columns([3, 1])
 
-    with col_title:
+    with left:
         st.markdown(
             "<p style='font-size:20px; font-weight:bold; margin:3px;'>나의 건설 속도</p>",
             unsafe_allow_html=True,
         )
 
-    with col_btn:
-        clicked = st.button("확인방법?", key="speed_help")
-    # 버튼만 스타일 입히기
+    with right:
+        help_clicked = st.button("확인방법?", key="speed_help_button")
+
+    # 이 CSS가 바로 위 st.button 하나에만 적용되도록 단순 타깃
     st.markdown(
         """
         <style>
-        div.stButton > button[kind="secondary"] {
+        div.stButton > button#speed_help_button {
             background-color: #ffffff;
             color: #333333;
             border: 1px solid #dddddd;
@@ -339,12 +344,12 @@ with col_speed:
         unsafe_allow_html=True,
     )
 
-    if clicked:
+    if help_clicked:
         st.session_state.show_speed_image = True
 
     if st.session_state.show_speed_image:
         st.image("Constructionspeed.png", caption="나의 건설 속도 확인 방법")
-        if st.button("닫기", key="close_speed_help"):
+        if st.button("닫기", key="speed_help_close"):
             st.session_state.show_speed_image = False
 
     my_speed = st.number_input(
@@ -368,6 +373,7 @@ with col_mayor:
 
 
 
+
 if st.button("🚀 계산하기", use_container_width=True):
     base_sec = d*86400 + h*3600 + m*60 + s
     final_sec = base_sec / (1 + (my_speed + mayor)/100)
@@ -381,6 +387,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
