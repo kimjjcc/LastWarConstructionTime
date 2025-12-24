@@ -11,6 +11,9 @@ def add_space(text: str) -> str:
 def to_million(v: float) -> str:
     return f"{int(v)}M" if v.is_integer() else f"{v:.1f}M"
 
+def format_time(d, h, m, s):
+    return f"{d}D {h:02}:{m:02}:{s:02}"
+
 # ----------------------
 # 페이지 설정
 # ----------------------
@@ -62,7 +65,7 @@ BUILDING_DATA = {
 }
 
 # ----------------------
-# 건물 / 레벨 선택 (같은 줄)
+# 건물 / 레벨 선택
 # ----------------------
 col_sel1, col_sel2 = st.columns([3, 2])
 
@@ -83,18 +86,10 @@ data = levels[level]
 d, h, m, s = data["time"]
 
 # ----------------------
-# 기본 건설 시간 (조금 작게)
+# 기본 건설 시간 (미리보기)
 # ----------------------
 st.markdown(
-    f"""
-    <div style="font-size:20px;font-weight:600;">
-        ⏱️ 기본 건설 시간<br>
-        <span style="font-size:24px;">
-        {d}D {h:02}:{m:02}:{s:02}
-        </span>
-    </div>
-    """,
-    unsafe_allow_html=True
+    f"**⏱️ 기본 건설 시간:** {format_time(d, h, m, s)}"
 )
 
 # ----------------------
@@ -108,22 +103,23 @@ if building.startswith("본부"):
 
     col_res, col_req = st.columns([3, 2])
 
-    # 자원
     with col_res:
         st.subheader("📦 필요 자원")
 
-        c1, c2, c3 = st.columns([1, 1, 1])
-        with c1:
-            st.image("iron.png", width=40)
-            st.markdown(f"{to_million(iron)}")
-        with c2:
-            st.image("food.png", width=40)
-            st.markdown(f"{to_million(food)}")
-        with c3:
-            st.image("gold.png", width=40)
-            st.markdown(f"{to_million(gold)}")
+        # ⬇⬇⬇ 여기 비율을 직접 줄이면 자원 간 간격이 더 좁아짐 ⬇⬇⬇
+        # 예: [0.8, 0.8, 0.8] / [0.6, 0.6, 0.6] 등
+        r1, r2, r3 = st.columns([0.7, 0.7, 0.7])
 
-    # 요구조건
+        with r1:
+            st.image("iron.png", width=36)
+            st.markdown(to_million(iron))
+        with r2:
+            st.image("food.png", width=36)
+            st.markdown(to_million(food))
+        with r3:
+            st.image("gold.png", width=36)
+            st.markdown(to_million(gold))
+
     with col_req:
         st.subheader("📌 요구 조건")
         st.markdown(f"- {req1}\n- {req2}")
@@ -145,5 +141,22 @@ if st.button("🚀 계산하기", use_container_width=True):
     end_time = datetime.now() + dur
 
     st.success("계산 완료")
-    st.metric("⏱️ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}")
-    st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
+    col_t1, col_t2 = st.columns(2)
+
+    with col_t1:
+        st.metric(
+            "⏱️ 기본 건설 시간",
+            format_time(d, h, m, s)
+        )
+
+    with col_t2:
+        st.metric(
+            "⚡ 최종 건설 시간",
+            f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}"
+        )
+
+    st.metric(
+        "📅 완료 예정 시각",
+        end_time.strftime("%Y-%m-%d %H:%M:%S")
+    )
