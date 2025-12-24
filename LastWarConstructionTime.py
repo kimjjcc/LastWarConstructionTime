@@ -16,40 +16,82 @@ st.caption("기본 건설 시간 ÷ (1 + 총 건설 가속 %)")
 st.divider()
 
 # ----------------------
+# 기본 건설 시간 테이블 (⚠️ 네가 채울 부분)
+# 단위: (days, hours, minutes, seconds)
+# ----------------------
+BUILD_TIME_TABLE = {
+    "본부": {
+        10: (0, 0, 0, 0),
+        11: (0, 0, 0, 0),
+        # ...
+        30: (0, 0, 0, 0),
+    },
+    "과학 기술 센터": {
+        10: (0, 0, 0, 0),
+        30: (0, 0, 0, 0),
+    },
+    "탱크 센터": {
+        10: (0, 0, 0, 0),
+        30: (0, 0, 0, 0),
+    },
+    "병영": {
+        10: (0, 0, 0, 0),
+        30: (0, 0, 0, 0),
+    },
+    "연병장": {
+        10: (0, 0, 0, 0),
+        30: (0, 0, 0, 0),
+    },
+    "연맹 센터": {
+        10: (0, 0, 0, 0),
+        30: (0, 0, 0, 0),
+    },
+    "병원": {
+        10: (0, 0, 0, 0),
+        30: (0, 0, 0, 0),
+    },
+    "베리어": {
+        10: (0, 0, 0, 0),
+        30: (0, 0, 0, 0),
+    },
+}
+
+# ----------------------
 # 입력 영역
 # ----------------------
-st.subheader("🔧 기본 건설 시간 입력")
+st.subheader("🏗️ 기본 건설 시간 입력")
 
 col1, col2 = st.columns(2)
 
 with col1:
-    base_days = st.number_input(
-        "기본 건설 일수 (Days)",
-        min_value=0,
-        value=0
-    )
-    base_hours = st.number_input(
-        "기본 건설 시간 (Hours)",
-        min_value=0,
-        max_value=23,
-        value=0
+    building_type = st.selectbox(
+        "건물 선택",
+        list(BUILD_TIME_TABLE.keys())
     )
 
 with col2:
-    base_minutes = st.number_input(
-        "기본 건설 분 (Minutes)",
-        min_value=0,
-        max_value=59,
-        value=0
-    )
-    base_seconds = st.number_input(
-        "기본 건설 초 (Seconds)",
-        min_value=0,
-        max_value=59,
-        value=0
+    building_level = st.selectbox(
+        "건물 레벨",
+        list(range(10, 31))
     )
 
+# 선택된 기본 시간 불러오기
+base_days, base_hours, base_minutes, base_seconds = \
+    BUILD_TIME_TABLE.get(building_type, {}).get(
+        building_level, (0, 0, 0, 0)
+    )
+
+st.caption(
+    f"선택된 기본 건설 시간: "
+    f"{base_days}D {base_hours:02}:{base_minutes:02}:{base_seconds:02}"
+)
+
 st.divider()
+
+# ----------------------
+# 가속 입력
+# ----------------------
+st.subheader("⚡ 건설 가속")
 
 col3, col4 = st.columns(2)
 
@@ -74,7 +116,6 @@ with col4:
 # ----------------------
 if st.button("🚀 계산하기", use_container_width=True):
 
-    # 기본 시간 → 초 변환
     base_seconds_total = (
         base_days * 86400 +
         base_hours * 3600 +
@@ -83,9 +124,8 @@ if st.button("🚀 계산하기", use_container_width=True):
     )
 
     if base_seconds_total <= 0:
-        st.error("기본 건설 시간은 0보다 커야 합니다.")
+        st.error("⚠️ 선택한 건물/레벨의 기본 건설 시간이 설정되어 있지 않습니다.")
     else:
-        # 가속 계산
         total_speed = (my_speed + mayor_speed) / 100.0
         final_seconds = base_seconds_total / (1 + total_speed)
 
@@ -108,10 +148,8 @@ if st.button("🚀 계산하기", use_container_width=True):
             value=finish_time.strftime("%Y-%m-%d %H:%M:%S")
         )
 
-        st.caption("※ 완료 예정 시각은 계산 버튼을 누른 시점을 기준으로 합니다.")
-
 # ----------------------
-# 설명 영역 (안전한 문자열 방식)
+# 설명 영역
 # ----------------------
 st.divider()
 st.subheader("📘 계산 공식 설명")
@@ -130,4 +168,3 @@ st.info(
     "⚠️ 게임 내 UI에 표시되는 가속 수치와 실제 적용 가속은 다를 수 있습니다.\n"
     "건설은 시작 시점 기준으로 계산됩니다."
 )
-
