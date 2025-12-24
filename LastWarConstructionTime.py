@@ -20,7 +20,7 @@ st.set_page_config(
     layout="centered"
 )
 
-st.image("lastwarg.png", width=72)
+st.image("lastwarg.png", width=64)
 st.markdown("## Last War 건설 시간 계산기")
 st.caption("건물 업그레이드 시간 · 자원 · 완료 시각 계산")
 st.divider()
@@ -29,10 +29,6 @@ st.divider()
 # 데이터
 # ----------------------
 BUILDING_DATA = {
-
-    # ======================
-    # 본부
-    # ======================
     "본부(Headquarters)": {
         "10 → 11": {"time": (0, 7, 4, 0), "res": (1.9, 1.9, 0.6), "req": ("과학센터10", "베리어10")},
         "11 → 12": {"time": (0, 9, 6, 0), "res": (3.2, 3.2, 1.0), "req": ("과학센터11", "병영11")},
@@ -56,9 +52,6 @@ BUILDING_DATA = {
         "29 → 30": {"time": (101,14,24,0),"res": (1400,1400,460),"req": ("과학센터29", "연병장29")},
     },
 
-    # ======================
-    # 기타 건물 (시간만)
-    # ======================
     "과학기술센터": {},
     "병영": {},
     "병원": {},
@@ -69,28 +62,34 @@ BUILDING_DATA = {
 }
 
 # ----------------------
-# 선택 UI
+# 건물 / 레벨 선택 (같은 줄)
 # ----------------------
-building = st.selectbox("🏗️ 건물 선택", BUILDING_DATA.keys())
-levels = BUILDING_DATA[building]
+col_sel1, col_sel2 = st.columns([3, 2])
 
+with col_sel1:
+    building = st.selectbox("🏗️ 건물 선택", BUILDING_DATA.keys())
+
+levels = BUILDING_DATA[building]
 if not levels:
+    with col_sel2:
+        st.selectbox("레벨 구간", [])
     st.info("⚠️ 이 건물의 상세 데이터는 아직 준비 중입니다.")
     st.stop()
 
-level = st.selectbox("레벨 구간", list(levels.keys())[::-1])
-data = levels[level]
+with col_sel2:
+    level = st.selectbox("레벨 구간", list(levels.keys())[::-1])
 
+data = levels[level]
 d, h, m, s = data["time"]
 
 # ----------------------
-# 기본 시간 (크게)
+# 기본 건설 시간 (조금 작게)
 # ----------------------
 st.markdown(
     f"""
-    <div style="font-size:26px;font-weight:700;">
+    <div style="font-size:20px;font-weight:600;">
         ⏱️ 기본 건설 시간<br>
-        <span style="font-size:25px;">
+        <span style="font-size:24px;">
         {d}D {h:02}:{m:02}:{s:02}
         </span>
     </div>
@@ -106,21 +105,28 @@ if building.startswith("본부"):
     req1, req2 = map(add_space, data["req"])
 
     st.divider()
-    st.subheader("📦 필요 자원")
 
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        st.image("iron.png", width=48)
-        st.markdown(f"**철**  \n{to_million(iron)}")
-    with c2:
-        st.image("food.png", width=48)
-        st.markdown(f"**식량**  \n{to_million(food)}")
-    with c3:
-        st.image("gold.png", width=48)
-        st.markdown(f"**골드**  \n{to_million(gold)}")
+    col_res, col_req = st.columns([3, 2])
 
-    st.subheader("📌 요구 조건")
-    st.markdown(f"- {req1}\n- {req2}")
+    # 자원
+    with col_res:
+        st.subheader("📦 필요 자원")
+
+        c1, c2, c3 = st.columns([1, 1, 1])
+        with c1:
+            st.image("iron.png", width=40)
+            st.markdown(f"{to_million(iron)}")
+        with c2:
+            st.image("food.png", width=40)
+            st.markdown(f"{to_million(food)}")
+        with c3:
+            st.image("gold.png", width=40)
+            st.markdown(f"{to_million(gold)}")
+
+    # 요구조건
+    with col_req:
+        st.subheader("📌 요구 조건")
+        st.markdown(f"- {req1}\n- {req2}")
 
 # ----------------------
 # 가속 계산
