@@ -231,10 +231,10 @@ BUILDING_DATA = {
 # ----------------------
 # 건물 / 레벨 선택
 # ----------------------
-st.markdown("<p style='font-size:18px; font-weight:bold; margin-bottom:0px;'>🏗️ 건물 선택</p>", unsafe_allow_html=True)
+st.markdown("<p style='font-size:20px; font-weight:bold; margin-bottom:0px;'>🏗️ 건물 선택</p>", unsafe_allow_html=True)
 building = st.selectbox("", BUILDING_DATA.keys(), key="building")
 
-st.markdown("<p style='font-size:18px; font-weight:bold; margin-bottom:0px; margin-top:10px;'>레벨 구간</p>", unsafe_allow_html=True)
+st.markdown("<p style='font-size:20px; font-weight:bold; margin-bottom:0px; margin-top:10px;'>레벨 구간</p>", unsafe_allow_html=True)
 level = st.selectbox("", list(BUILDING_DATA[building].keys())[::-1], key="level")
 
 data = BUILDING_DATA[building][level]
@@ -291,6 +291,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
