@@ -1,2 +1,25 @@
-# LastWarConstructionTime
-Last War Construction Estimated Time Calculator
+# 🏗️ Last War 건설 시간 계산기
+
+라스트워(Last War) 게임의 **건설 완료 예상 시간**을 계산해주는 웹 계산기입니다.
+
+## 🔢 계산 공식
+
+- 총 건설 가속 = 나의 건설 속도 + 건설 장관
+- 가속은 단순 합산 방식
+- 건설 시작 시점 기준으로 적용
+
+## 🌐 배포
+- Streamlit Cloud (streamlit.app)
+- GitHub 연동 자동 배포
+
+## 📥 입력값
+- 기본 건설 시간 (일/시/분/초)
+- 나의 건설 속도 (%)
+- 건설 장관 (%)
+
+## 📤 출력값
+- 최종 건설 소요 시간
+- 완료 예정 시각 (현재 기준)
+
+## ⚠️ 주의사항
+게임 UI의 가속 수치와 실제 적용 값이 다를 수 있습니다.
