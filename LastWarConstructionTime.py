@@ -101,7 +101,7 @@ if building.startswith("본부"):
 
         # ⬇⬇⬇ 여기 비율을 직접 줄이면 자원 간 간격이 더 좁아짐 ⬇⬇⬇
         # 예: [0.8, 0.8, 0.8] / [0.6, 0.6, 0.6] 등
-        r1, r2, r3 = st.columns([0.5, 0.5, 0.5])
+        r1, r2, r3 = st.columns([0.3, 0.3, 0.3])
 
         with r1:
             st.image("iron.png", width=36)
@@ -153,5 +153,6 @@ if st.button("🚀 계산하기", use_container_width=True):
         "📅 완료 예정 시각",
         end_time.strftime("%Y-%m-%d %H:%M:%S")
     )
+
 
 
