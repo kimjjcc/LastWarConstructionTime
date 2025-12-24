@@ -319,7 +319,7 @@ def close_modal():
 
 with col_speed:
     # 텍스트와 버튼을 한 컬럼 안에서 좁게 배치
-    row = st.columns([3,1])  # 텍스트 컬럼 비율을 줄여서 버튼이 가까이 오도록
+    row = st.columns([1,1])  # 텍스트 컬럼 비율을 줄여서 버튼이 가까이 오도록
     with row[0]:
         st.markdown("<p style='font-size:20px; font-weight:bold; margin:3px; display:inline;'>나의 건설 속도</p>", unsafe_allow_html=True)
     with row[1]:
@@ -377,6 +377,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
