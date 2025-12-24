@@ -10,7 +10,7 @@ st.set_page_config(
     layout="centered"
 )
 
-st.title("🏗️ Last War 건설 시간 계산기")
+st.title("🛠️ Last War 건설 시간 계산기")
 st.caption("기본 건설 시간 ÷ (1 + 총 건설 가속 %)")
 
 st.divider()
@@ -168,4 +168,5 @@ st.info(
     "⚠️ 게임 내 UI에 표시되는 가속 수치와 실제 적용 가속은 다를 수 있습니다.\n"
     "건설은 시작 시점 기준으로 계산됩니다."
 )
+
 
