@@ -302,64 +302,70 @@ if reqs:
 # ----------------------
 # 가속 계산
 # ----------------------
+import streamlit as st
+
+if "show_speed_image" not in st.session_state:
+    st.session_state.show_speed_image = False
+
 st.divider()
 st.subheader("⚡ 건설 가속")
 
 col_speed, col_mayor = st.columns(2)
 
-# 세션 스테이트 초기화
-if "show_modal" not in st.session_state:
-    st.session_state.show_modal = False
-
-def open_modal():
-    st.session_state.show_modal = True
-
-def close_modal():
-    st.session_state.show_modal = False
-
 with col_speed:
-    # 텍스트와 버튼을 한 컬럼 안에서 좁게 배치
-    row = st.columns([1,1])  # 텍스트 컬럼 비율을 줄여서 버튼이 가까이 오도록
-    with row[0]:
-        st.markdown("<p style='font-size:20px; font-weight:bold; margin:3px; display:inline;'>나의 건설 속도</p>", unsafe_allow_html=True)
-    with row[1]:
-        st.button("확인방법", on_click=open_modal)
+    # 제목 + 버튼을 한 줄에 배치
+    left, right = st.columns([3, 1])
 
-    # 숫자 입력
-    my_speed = st.number_input("", 0.0, 500.0, 0.0, 0.1, label_visibility="collapsed")
+    with left:
+        st.markdown(
+            "<p style='font-size:20px; font-weight:bold; margin:3px;'>나의 건설 속도</p>",
+            unsafe_allow_html=True,
+        )
 
-# 모달 흉내 (중앙, 반투명 배경)
-if st.session_state.show_modal:
-    with st.container():
-        # 배경 레이어
-        st.markdown(
-            """
-            <div style='position:fixed; top:0; left:0; width:100%; height:100%;
-                        background-color: rgba(0,0,0,0.5); z-index:9998;'>
-            </div>
-            """, unsafe_allow_html=True
-        )
-        # 팝업 박스
-        st.markdown(
-            """
-            <div style='position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-                        background-color:white; border:2px solid gray; padding:15px; z-index:9999;
-                        max-width:90%; text-align:center;'>
-            """, unsafe_allow_html=True
-        )
-        st.image("Constructionspeed.png", use_column_width=True)
-        st.button("닫기", on_click=close_modal)
-        st.markdown("</div>", unsafe_allow_html=True)
+    with right:
+        help_clicked = st.button("확인방법?", key="speed_help_button")
+
+    # 이 CSS가 바로 위 st.button 하나에만 적용되도록 단순 타깃
+    st.markdown(
+        """
+        <style>
+        div.stButton > button#speed_help_button {
+            background-color: #ffffff;
+            color: #333333;
+            border: 1px solid #dddddd;
+            border-radius: 6px;
+            padding: 6px 10px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    if help_clicked:
+        st.session_state.show_speed_image = True
+
+    if st.session_state.show_speed_image:
+        st.image("Constructionspeed.png", caption="나의 건설 속도 확인 방법")
+        if st.button("닫기", key="speed_help_close"):
+            st.session_state.show_speed_image = False
+
+    my_speed = st.number_input(
+        "", 0.0, 500.0, 0.0, 0.1, label_visibility="collapsed"
+    )
 
 with col_mayor:
-    st.markdown("<p style='font-size:20px; font-weight:bold; margin:3px;'>장관 가속</p>", unsafe_allow_html=True)
+    st.markdown(
+        "<p style='font-size:20px; font-weight:bold; margin:3px;'>장관 가속</p>",
+        unsafe_allow_html=True,
+    )
     mayor = st.selectbox(
         "",
         ["건설장관 50%", "과학부장 25%"],
         index=0,
         key="mayor_select",
-        label_visibility="collapsed"
+        label_visibility="collapsed",
     )
+
 
 
 
@@ -377,6 +383,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
