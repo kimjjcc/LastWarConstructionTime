@@ -270,7 +270,6 @@ data = BUILDING_DATA[building][level]
 d, h, m, s = data["time"]
 
 
-
 # ----------------------
 # 자원 / 요구조건
 # ----------------------
@@ -320,6 +319,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
