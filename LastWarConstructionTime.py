@@ -314,7 +314,14 @@ with col_speed:
     with col_title:
         st.markdown("<p style='font-size:20px; font-weight:bold; margin:3px;'>나의 건설 속도</p>", unsafe_allow_html=True)
     with col_btn:
-        st.markdown("<span style='background:#4CAF50;color:white;padding:4px 8px;border-radius:4px;font-size:14px;font-weight:500;cursor:pointer;height:24px;line-height:1;display:inline-flex;align-items:center;'>확인방법?</span>", unsafe_allow_html=True)
+        if st.button("확인방법?", key="speed_help"):
+            st.session_state.show_image = True
+    
+    # 이미지 표시
+    if st.session_state.get("show_image", False):
+        st.image("Constructionspeed.png", caption="나의 건설 속도 확인 방법", use_column_width=True)
+        if st.button("닫기", key="close_help"):
+            st.session_state.show_image = False
     
     my_speed = st.number_input("", 0.0, 500.0, 0.0, 0.1, label_visibility="collapsed")
 
@@ -327,6 +334,7 @@ with col_mayor:
         key="mayor_select",
         label_visibility="collapsed"
     )
+
 
 
 
@@ -343,6 +351,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
