@@ -25,21 +25,25 @@ st.set_page_config(
     layout="centered"
 )
 
-# 이미지와 제목을 같은 줄, 수직 가운데 정렬
+# 이미지와 제목을 같은 줄, 수직 가운데 정렬, 간격 최소화
 col1, col2 = st.columns([1, 8])
 
 with col1:
-    st.image("lastwarg.png", width=55)
+    st.image("lastwarg.png", width=55, output_format="auto")
 
 with col2:
     st.markdown(
-        "<div style='display:flex; align-items:center; height:100%;'>"
-        "## Last War 건설 시간 계산기"
-        "</div>", unsafe_allow_html=True
+        """
+        <div style='display:flex; align-items:center; height:100%;'>
+            <h2 style='margin:0; padding-left:5px;'>Last War 건설 시간 계산기</h2>
+        </div>
+        """,
+        unsafe_allow_html=True
     )
 
 st.caption("건물 업그레이드 시간 · 자원 · 완료 시각 계산")
 st.divider()
+
 
 
 # ----------------------
@@ -281,6 +285,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
