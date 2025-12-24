@@ -302,60 +302,24 @@ if reqs:
 # ----------------------
 # 가속 계산
 # ----------------------
-import streamlit as st
-
-if "show_speed_image" not in st.session_state:
-    st.session_state.show_speed_image = False
-
 st.divider()
 st.subheader("⚡ 건설 가속")
 
-# 왼쪽(나의 건설 속도) : 오른쪽(장관 가속)
-col_speed, col_mayor = st.columns([2, 2])
+col_speed, col_mayor = st.columns(2)
 
 with col_speed:
-    left, right = st.columns([1, 1])
-
-    with left:
-        st.markdown(
-            "<p style='font-size:20px; font-weight:bold; margin:3px;'>나의 건설 속도</p>",
-            unsafe_allow_html=True,
-        )
-
-    with right:
-        help_clicked = st.button("확인방법?", key="speed_help_button")
-
-    if help_clicked:
-        st.session_state.show_speed_image = True
-
-    # 모달 느낌의 박스로 바로 아래에 표시
-    if st.session_state.show_speed_image:
-        with st.container(border=True):
-            st.image("Constructionspeed.png", caption="나의 건설 속도 확인 방법", use_column_width=True)
-            close_clicked = st.button("닫기", key="speed_help_close")
-            if close_clicked:
-                st.session_state.show_speed_image = False
-
-    my_speed = st.number_input(
-        "", 0.0, 500.0, 0.0, 0.1, label_visibility="collapsed"
-    )
+    st.markdown("<p style='font-size:20px; font-weight:bold; margin:3px;'>나의 건설 속도</p>", unsafe_allow_html=True)
+    my_speed = st.number_input("", 0.0, 500.0, 0.0, 0.1, label_visibility="collapsed")
 
 with col_mayor:
-    st.markdown(
-        "<p style='font-size:20px; font-weight:bold; margin:3px;'>장관 가속</p>",
-        unsafe_allow_html=True,
-    )
+    st.markdown("<p style='font-size:20px; font-weight:bold; margin:3px;'>장관 가속</p>", unsafe_allow_html=True)
     mayor = st.selectbox(
         "",
         ["건설장관 50%", "과학부장 25%"],
-        index=0,
+        index=0,  # 기본값: 건설장관 50%
         key="mayor_select",
-        label_visibility="collapsed",
+        label_visibility="collapsed"
     )
-
-
-
-
 
 
 if st.button("🚀 계산하기", use_container_width=True):
@@ -371,6 +335,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
