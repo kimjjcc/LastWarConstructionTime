@@ -5,17 +5,12 @@ import re
 # ----------------------
 # 유틸 함수
 # ----------------------
-def to_million(value: int) -> str:
-    m = value / 1_000_000
-    if m.is_integer():
-        return f"{int(m)}M"
-    return f"{m:.1f}M"
+def to_million(m_value: float) -> str:
+    if float(m_value).is_integer():
+        return f"{int(m_value)}M"
+    return f"{m_value:.1f}M"
 
-def add_space_between_text_and_number(text: str) -> str:
-    """
-    과학센터11 -> 과학센터 11
-    병영27 -> 병영 27
-    """
+def add_space(text: str) -> str:
     return re.sub(r"([가-힣A-Za-z]+)(\d+)", r"\1 \2", text)
 
 # ----------------------
@@ -27,81 +22,57 @@ st.set_page_config(
     layout="centered"
 )
 
-col_icon, col_title = st.columns([1, 6])
-
-with col_icon:
-    st.image("lastwarg.png", width=64)
-
-with col_title:
-    st.markdown("## Last War 건설 시간 계산기")
-
+st.image("lastwarg.png", width=72)
+st.markdown("## Last War 건설 시간 계산기")
 st.caption("건물 업그레이드 시 예상 완료 시간과 필요 자원을 확인할 수 있습니다.")
 st.divider()
 
 # ----------------------
-# 데이터
+# 데이터 (Lv.10 → 30 전부)
 # ----------------------
-BUILD_DATA_TABLE = {
-    "본부(Headquarters)": {
-        "10 → 11": {
-            "time": (0, 7, 4, 0),
-            "resource": (1_900_000, 1_900_000, 600_000),
-            "require": ("과학센터10", "베리어10"),
-        },
-        "11 → 12": {
-            "time": (0, 9, 6, 0),
-            "resource": (3_200_000, 3_200_000, 1_000_000),
-            "require": ("과학센터11", "병영11"),
-        },
-        "12 → 13": {
-            "time": (0, 12, 5, 0),
-            "resource": (3_500_000, 3_500_000, 1_100_000),
-            "require": ("과학센터12", "탱크센터12"),
-        },
-        "13 → 14": {
-            "time": (0, 16, 2, 0),
-            "resource": (4_900_000, 4_900_000, 1_600_000),
-            "require": ("과학센터13", "연병장13"),
-        },
-        "14 → 15": {
-            "time": (0, 22, 7, 0),
-            "resource": (6_800_000, 6_800_000, 2_200_000),
-            "require": ("과학센터14", "베리어14"),
-        },
-    }
+HQ_DATA = {
+    "10 → 11": {"time": (0, 7, 4, 0),  "res": (1.9, 1.9, 0.6),  "req": ("과학센터10", "베리어10")},
+    "11 → 12": {"time": (0, 9, 6, 0),  "res": (3.2, 3.2, 1.0),  "req": ("과학센터11", "병영11")},
+    "12 → 13": {"time": (0,12, 5, 0), "res": (3.5, 3.5, 1.1),  "req": ("과학센터12", "탱크센터12")},
+    "13 → 14": {"time": (0,16, 2, 0), "res": (4.9, 4.9, 1.6),  "req": ("과학센터13", "연병장13")},
+    "14 → 15": {"time": (0,22, 7, 0), "res": (6.8, 6.8, 2.2),  "req": ("과학센터14", "베리어14")},
+    "15 → 16": {"time": (1, 7,48, 0), "res": (12, 12, 3.9),   "req": ("과학센터15", "연맹센터15")},
+    "16 → 17": {"time": (1,19,12, 0), "res": (16, 16, 5.1),   "req": ("과학센터16", "탱크센터16")},
+    "17 → 18": {"time": (2,14,24, 0), "res": (28, 28, 8.9),   "req": ("과학센터17", "병원17")},
+    "18 → 19": {"time": (3,14,24, 0), "res": (33, 33, 11),    "req": ("과학센터18", "베리어18")},
+    "19 → 20": {"time": (5, 2,24, 0), "res": (60, 60, 19),    "req": ("과학센터19", "병영19")},
+    "20 → 21": {"time": (6,14,24, 0), "res": (84, 84, 27),    "req": ("과학센터20", "탱크센터20")},
+    "21 → 22": {"time": (8,14,24, 0), "res": (110,110,35),    "req": ("과학센터21", "연병장21")},
+    "22 → 23": {"time": (11, 2,24,0), "res": (140,140,44),    "req": ("과학센터22", "베리어22")},
+    "23 → 24": {"time": (15,14,24,0), "res": (170,170,54),    "req": ("과학센터23", "연맹센터23")},
+    "24 → 25": {"time": (21,21,36,0), "res": (290,290,93),    "req": ("과학센터24", "탱크센터24")},
+    "25 → 26": {"time": (30,14,24,0), "res": (400,400,130),   "req": ("과학센터25", "병원25")},
+    "26 → 27": {"time": (42,21,36,0), "res": (530,530,170),   "req": ("과학센터26", "베리어26")},
+    "27 → 28": {"time": (60, 2,24,0), "res": (740,740,240),   "req": ("과학센터27", "병영27")},
+    "28 → 29": {"time": (78, 2,24,0), "res": (1000,1000,330), "req": ("과학센터28", "탱크센터28")},
+    "29 → 30": {"time": (101,14,24,0),"res": (1400,1400,460), "req": ("과학센터29", "연병장29")},
 }
 
 # ----------------------
-# 업그레이드 선택
+# 선택
 # ----------------------
-st.subheader("🛠️ 업그레이드 선택")
+st.subheader("🛠️ 본부 업그레이드 선택")
+level = st.selectbox("레벨 구간", list(HQ_DATA.keys())[::-1])
+data = HQ_DATA[level]
 
-col1, col2 = st.columns(2)
-
-with col1:
-    building_type = st.selectbox("건물 선택", BUILD_DATA_TABLE.keys())
-
-with col2:
-    building_step = st.selectbox(
-        "레벨 구간",
-        list(BUILD_DATA_TABLE[building_type].keys())[::-1]
-    )
-
-data = BUILD_DATA_TABLE[building_type][building_step]
-
-base_days, base_hours, base_minutes, base_seconds = data["time"]
-iron, food, gold = data["resource"]
-req1, req2 = data["require"]
+d, h, m, s = data["time"]
+iron, food, gold = data["res"]
+req1, req2 = map(add_space, data["req"])
 
 # ----------------------
-# 기본 건설 시간 (크게 표시)
+# 기본 시간 (크게)
 # ----------------------
 st.markdown(
     f"""
-    <div style="font-size:22px; font-weight:700; margin-top:10px;">
+    <div style="font-size:26px;font-weight:700;">
         ⏱️ 기본 건설 시간<br>
-        <span style="font-size:28px;">
-            {base_days}D {base_hours:02}:{base_minutes:02}:{base_seconds:02}
+        <span style="font-size:32px;">
+        {d}D {h:02}:{m:02}:{s:02}
         </span>
     </div>
     """,
@@ -111,106 +82,58 @@ st.markdown(
 st.divider()
 
 # ----------------------
-# 자원 표시 (아이콘 이미지 사용)
+# 자원
 # ----------------------
 st.subheader("📦 필요 자원")
 
-col_r1, col_r2, col_r3 = st.columns(3)
-
-with col_r1:
+c1, c2, c3 = st.columns(3)
+with c1:
     st.image("iron.png", width=48)
     st.markdown(f"**철**  \n{to_million(iron)}")
 
-with col_r2:
+with c2:
     st.image("food.png", width=48)
     st.markdown(f"**식량**  \n{to_million(food)}")
 
-with col_r3:
+with c3:
     st.image("gold.png", width=48)
     st.markdown(f"**골드**  \n{to_million(gold)}")
 
 # ----------------------
-# 요구 조건 (띄어쓰기 적용)
+# 요구조건
 # ----------------------
 st.subheader("📌 요구 조건")
-
-req1 = add_space_between_text_and_number(req1)
-req2 = add_space_between_text_and_number(req2)
-
-st.markdown(
-    f"""
-    - {req1}  
-    - {req2}
-    """
-)
+st.markdown(f"- {req1}\n- {req2}")
 
 st.divider()
 
 # ----------------------
-# 가속 입력
+# 가속 계산
 # ----------------------
 st.subheader("⚡ 건설 가속")
 
-col3, col4 = st.columns(2)
+my_speed = st.number_input("나의 건설 속도 (%)", 0.0, 500.0, 0.0, 0.1)
+mayor = st.selectbox("건설 장관 가속 (%)", [0.0, 25.0, 50.0], index=2)
 
-with col3:
-    my_speed = st.number_input(
-        "나의 건설 속도 (%)",
-        min_value=0.0,
-        max_value=500.0,
-        value=0.0,
-        step=0.1
-    )
-
-with col4:
-    mayor_speed = st.selectbox(
-        "건설 장관 가속 (%)",
-        options=[0.0, 25.0, 50.0],
-        index=2
-    )
-
-# ----------------------
-# 계산
-# ----------------------
 if st.button("🚀 계산하기", use_container_width=True):
+    base_sec = d*86400 + h*3600 + m*60 + s
+    total_speed = (my_speed + mayor) / 100
+    final_sec = base_sec / (1 + total_speed)
 
-    base_seconds_total = (
-        base_days * 86400 +
-        base_hours * 3600 +
-        base_minutes * 60 +
-        base_seconds
-    )
+    dur = timedelta(seconds=int(final_sec))
+    end_time = datetime.now() + dur
 
-    total_speed = (my_speed + mayor_speed) / 100.0
-    final_seconds = base_seconds_total / (1 + total_speed)
-
-    duration = timedelta(seconds=int(final_seconds))
-    finish_time = datetime.now() + duration
-
-    days = duration.days
-    hours, remainder = divmod(duration.seconds, 3600)
-    minutes, seconds = divmod(remainder, 60)
-
-    st.success("✅ 계산 완료")
-
-    st.metric(
-        "⏱️ 최종 건설 시간",
-        f"{days}D {hours:02}:{minutes:02}:{seconds:02}"
-    )
-
-    st.metric(
-        "📅 완료 예정 시각",
-        finish_time.strftime("%Y-%m-%d %H:%M:%S")
-    )
+    st.success("계산 완료")
+    st.metric("⏱️ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}")
+    st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
 
 # ----------------------
 # 공식
 # ----------------------
 st.divider()
 st.subheader("📘 계산 공식")
-
 st.markdown(
-    "**최종 건설 시간 = 기본 건설 시간 ÷ (1 + 총 건설 가속 %)**\n\n"
-    "- 총 건설 가속 % = 나의 건설 속도 + 건설 장관 가속\n"
-    "- 자원 표기는 M 단위 기준"
+    "- **최종 건설 시간 = 기본 건설 시간 ÷ (1 + 총 건설 가속 %)**\n"
+    "- 총 가속 = 나의 건설 속도 + 건설 장관 가속\n"
+    "- 자원은 M 단위 기준"
 )
