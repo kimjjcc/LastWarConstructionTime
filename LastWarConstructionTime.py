@@ -30,7 +30,7 @@ col1, col2 = st.columns([1, 8])
 with col1:
     st.markdown(
         '<div style="display: flex; align-items: center; height: 100%;">'
-        '<img src="lastwarg.png" width="55">'
+        '<img src="lastwarg.png" width="64">'
         '</div>', unsafe_allow_html=True
     )
 with col2:
@@ -282,6 +282,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
