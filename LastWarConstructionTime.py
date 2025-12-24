@@ -104,13 +104,13 @@ if building.startswith("본부"):
         r1, r2, r3 = st.columns([0.7, 0.7, 0.7])
 
         with r1:
-            st.image("iron.png", width=50)
+            st.image("iron.png", width=40)
             st.markdown(to_million(iron))
         with r2:
             st.image("food.png", width=40)
             st.markdown(to_million(food))
         with r3:
-            st.image("gold.png", width=36)
+            st.image("gold.png", width=40)
             st.markdown(to_million(gold))
 
     with col_req:
@@ -153,4 +153,5 @@ if st.button("🚀 계산하기", use_container_width=True):
         "📅 완료 예정 시각",
         end_time.strftime("%Y-%m-%d %H:%M:%S")
     )
+
 
