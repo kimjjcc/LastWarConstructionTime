@@ -306,7 +306,7 @@ st.divider()
 st.subheader("⚡ 건설 가속")
 
 # 문구 칸 추가 (비워둠, 나중에 내용 입력 가능)
-st.markdown("<p style='font-size:14px; color:gray; margin-bottom:5px;'>(나의 건설 속도는 [기지 → 통계 → 경제탭에서 건설건물속도증가 % 확인])</p>", unsafe_allow_html=True)
+st.markdown("<p style='font-size:14px; color:gray; margin-bottom:5px;'>* 나의 건설 속도는 [기지 → 통계 → 경제탭에서 건설건물속도증가 % 확인]</p>", unsafe_allow_html=True)
 
 col_speed, col_mayor = st.columns(2)
 
@@ -338,6 +338,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
