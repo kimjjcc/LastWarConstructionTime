@@ -231,10 +231,15 @@ BUILDING_DATA = {
 # ----------------------
 # 건물 / 레벨 선택
 # ----------------------
-building = st.selectbox("🏗️ 건물 선택", BUILDING_DATA.keys())
-level = st.selectbox("레벨 구간", list(BUILDING_DATA[building].keys())[::-1])
+st.markdown("<h3>🏗️ 건물 선택</h3>", unsafe_allow_html=True)
+building = st.selectbox("", BUILDING_DATA.keys())
+
+st.markdown("<h3>레벨 구간</h3>", unsafe_allow_html=True)
+level = st.selectbox("", list(BUILDING_DATA[building].keys())[::-1])
+
 data = BUILDING_DATA[building][level]
 d, h, m, s = data["time"]
+
 
 # ----------------------
 # 자원 / 요구조건
@@ -285,6 +290,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
