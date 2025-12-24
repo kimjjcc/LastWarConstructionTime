@@ -35,7 +35,7 @@ with col1:
 with col2:
     st.markdown(
         '<div style="display:flex; align-items:center; height:100%;">'
-        '<h2 style="margin:0; margin-top:0px; padding-left:0px; line-height:1;">Last War 건설 시간 계산기 (౨ৎ Luffyf)</h2>'
+        '<h2 style="margin:0; margin-top:0px; padding-left:0px; line-height:1;">Last War 건설 시간 계산기 (౨ৎLuffy)</h2>'
         '</div>',
         unsafe_allow_html=True
     )
@@ -360,6 +360,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
