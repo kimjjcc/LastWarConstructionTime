@@ -9,6 +9,10 @@ st.set_page_config(
     page_icon="🏗️",
     layout="centered"
 )
+
+st.title("🏗️ Last War 건설 시간 계산기")
+st.caption("기본 건설 시간 ÷ (1 + 총 건설 가속 %)")
+
 st.divider()
 
 # ----------------------
