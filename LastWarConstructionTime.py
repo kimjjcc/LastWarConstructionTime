@@ -302,8 +302,26 @@ if reqs:
 # ----------------------
 st.divider()
 st.subheader("⚡ 건설 가속")
-my_speed = st.number_input("나의 건설 속도 (%)", 0.0, 500.0, 0.0, 0.1)
-mayor = st.selectbox("건설 장관 가속 (%)", [0.0,25.0,50.0], index=2)
+
+col_speed, col_mayor = st.columns(2)
+
+with col_speed:
+    st.markdown("<p style='font-size:20px; font-weight:bold; margin:3px;'>나의 건설 속도</p>", unsafe_allow_html=True)
+    my_speed = st.number_input("", 0.0, 500.0, 0.0, 0.1, label_visibility="collapsed")
+
+with col_mayor:
+    st.markdown("<p style='font-size:20px; font-weight:bold; margin:3px;'>장관 가속</p>", unsafe_allow_html=True)
+    mayor = st.multiselect(
+        "",
+        ["건설장관 50%", "과학부장 25%"],
+        ["건설장관 50%", "과학부장 25%"],  # 기본값: 둘 다 선택
+        key="mayor_select",
+        label_visibility="collapsed"
+    )
+
+# 장관 가속 합계 계산
+mayor_bonus = sum([50.0 if "건설장관 50%" in mayor else 0, 25.0 if "과학부장 25%" in mayor else 0])
+
 
 if st.button("🚀 계산하기", use_container_width=True):
     base_sec = d*86400 + h*3600 + m*60 + s
@@ -318,6 +336,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
