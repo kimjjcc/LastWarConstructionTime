@@ -310,11 +310,10 @@ if "show_speed_image" not in st.session_state:
 st.divider()
 st.subheader("⚡ 건설 가속")
 
-# 왼쪽(나의 건설 속도) : 오른쪽(장관 가속) = 1 : 2 로 축소
+# 왼쪽(나의 건설 속도) : 오른쪽(장관 가속)
 col_speed, col_mayor = st.columns([2, 2])
 
 with col_speed:
-    # 제목 / 버튼 비율도 2:1 로 줄여서 버튼이 더 붙게
     left, right = st.columns([1, 1])
 
     with left:
@@ -326,15 +325,16 @@ with col_speed:
     with right:
         help_clicked = st.button("확인방법?", key="speed_help_button")
 
-    if "show_speed_image" not in st.session_state:
-        st.session_state.show_speed_image = False
     if help_clicked:
         st.session_state.show_speed_image = True
 
+    # 모달 느낌의 박스로 바로 아래에 표시
     if st.session_state.show_speed_image:
-        st.image("Constructionspeed.png", caption="나의 건설 속도 확인 방법")
-        if st.button("닫기", key="speed_help_close"):
-            st.session_state.show_speed_image = False
+        with st.container(border=True):
+            st.image("Constructionspeed.png", caption="나의 건설 속도 확인 방법", use_column_width=True)
+            close_clicked = st.button("닫기", key="speed_help_close")
+            if close_clicked:
+                st.session_state.show_speed_image = False
 
     my_speed = st.number_input(
         "", 0.0, 500.0, 0.0, 0.1, label_visibility="collapsed"
@@ -371,6 +371,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
