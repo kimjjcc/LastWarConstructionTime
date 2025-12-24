@@ -54,66 +54,44 @@ BUILDING_DATA = {
         "28 → 29": {"time": (78, 3,46,37),"res": (1000,1000,330),"req": ("과학센터28","탱크센터28")},
         "29 → 30": {"time": (101,14,30,37),"res": (1400,1400,460),"req": ("과학센터29","연병장29")},
     },
-
-    "과학기술센터": {},
-
-    "병영": {},
-    "병원": {},
-    "탱크 센터": {},
-    "연병장": {},
-    "연맹 센터": {},
-    "베리어": {},
 }
 
 # ----------------------
-# 건물 / 레벨 선택
+# 선택
 # ----------------------
-col_sel1, col_sel2 = st.columns([3, 2])
+building = st.selectbox("🏗️ 건물 선택", BUILDING_DATA.keys())
+level = st.selectbox("레벨 구간", list(BUILDING_DATA[building].keys())[::-1])
 
-with col_sel1:
-    building = st.selectbox("🏗️ 건물 선택", BUILDING_DATA.keys())
-
-levels = BUILDING_DATA[building]
-if not levels:
-    with col_sel2:
-        st.selectbox("레벨 구간", [])
-    st.info("⚠️ 이 건물의 상세 데이터는 아직 준비 중입니다.")
-    st.stop()
-
-with col_sel2:
-    level = st.selectbox("레벨 구간", list(levels.keys())[::-1])
-
-data = levels[level]
+data = BUILDING_DATA[building][level]
 d, h, m, s = data["time"]
 
 # ----------------------
 # 자원 / 요구조건
 # ----------------------
-if "res" in data:
-    iron, food, gold = data["res"]
-    reqs = [add_space(r) for r in data.get("req", [])]
+iron, food, gold = data["res"]
+reqs = [add_space(r) for r in data.get("req", [])]
 
-    st.divider()
-    col_res, col_req = st.columns([3, 2])
+st.divider()
+col_res, col_req = st.columns([3,2])
 
-    with col_res:
-        st.subheader("📦 필요 자원")
-        r1, r2, r3 = st.columns([0.7, 0.7, 0.7])
-        with r1:
-            st.image("iron.png", width=40)
-            st.markdown(to_million(iron))
-        with r2:
-            st.image("food.png", width=40)
-            st.markdown(to_million(food))
-        with r3:
-            st.image("gold.png", width=40)
-            st.markdown(to_million(gold))
+with col_res:
+    st.subheader("📦 필요 자원")
+    r1, r2, r3 = st.columns(3)
+    with r1:
+        st.image("iron.png", width=40)
+        st.markdown(to_million(iron))
+    with r2:
+        st.image("food.png", width=40)
+        st.markdown(to_million(food))
+    with r3:
+        st.image("gold.png", width=40)
+        st.markdown(to_million(gold))
 
-    if reqs:
-        with col_req:
-            st.subheader("📌 요구 조건")
-            for r in reqs:
-                st.markdown(f"- {r}")
+if reqs:
+    with col_req:
+        st.subheader("📌 요구 조건")
+        for r in reqs:
+            st.markdown(f"- {r}")
 
 # ----------------------
 # 가속 계산
@@ -132,5 +110,14 @@ if st.button("🚀 계산하기", use_container_width=True):
     end_time = datetime.now() + dur
 
     st.success("계산 완료")
-    st.metric("⏱️ 기본 건설 시간", format_time(d,h,m,s))
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("⏱️ 기본 건설 시간", format_time(d,h,m,s))
+    with col2:
+        st.metric(
+            "⚡ 최종 건설 시간",
+            f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}"
+        )
+
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
