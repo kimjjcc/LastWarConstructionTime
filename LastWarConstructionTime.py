@@ -306,25 +306,37 @@ st.subheader("⚡ 건설 가속")
 
 col_speed, col_mayor = st.columns(2)
 
+# 팝업 상태 관리
+if "show_speed_help" not in st.session_state:
+    st.session_state.show_speed_help = False
+
+col_speed, col_mayor = st.columns(2)
+
 with col_speed:
-    # 제목 + 도움말 버튼을 한 줄에
-    col_title, col_btn = st.columns([3, 1])
-    with col_title:
-        st.markdown("<p style='font-size:20px; font-weight:bold; margin:3px; line-height:1.2;'>나의 건설 속도</p>", unsafe_allow_html=True)
-    with col_btn:
-        if st.button("확인방법?", key="speed_help", help="클릭하면 이미지 팝업"):
-            st.markdown("""
-            <div style='position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); 
-                        background:white; padding:20px; border-radius:10px; box-shadow:0 4px 20px rgba(0,0,0,0.5); 
-                        z-index:1000; max-width:90vw; max-height:90vh;'>
-                <img src='data:image/png;base64,{img_base64}' style='max-width:100%; max-height:80vh; border-radius:5px;'>
-                <button onclick='this.parentElement.remove()' style='margin-top:10px; padding:8px 16px; 
-                                background:#ff6b6b; color:white; border:none; border-radius:5px; cursor:pointer;'>
-                    닫기</button>
-            </div>
-            <style>body {{overflow:hidden;}}</style>
-            """.format(img_base64=base64.b64encode(open("Constructionspeed.png", "rb").read()).decode()), 
-            unsafe_allow_html=True)
+    # 한 줄에 완벽히 배치 (flexbox 사용)
+    st.markdown("""
+    <div style='display:flex; align-items:center; gap:8px; margin:3px;'>
+        <span style='font-size:20px; font-weight:bold; line-height:1.2;'>나의 건설 속도</span>
+        <button onclick='document.getElementById("speed-popup").style.display="block"' 
+                style='font-size:14px; padding:4px 8px; background:#4CAF50; color:white; 
+                       border:none; border-radius:4px; cursor:pointer; height:28px;'>
+            확인방법?
+        </button>
+    </div>
+    <div id="speed-popup" style='position:fixed; top:0; left:0; width:100vw; height:100vh; 
+                                background:rgba(0,0,0,0.5); z-index:9999; display:none;'>
+        <div style='position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); 
+                    background:white; padding:20px; border-radius:10px; max-width:90vw; max-height:90vh;'>
+            <img src='data:image/png;base64,{img_base64}' style='max-width:100%; max-height:70vh; border-radius:5px; display:block; margin-bottom:15px;'>
+            <button onclick='document.getElementById("speed-popup").style.display="none"' 
+                    style='width:100%; padding:12px; background:#ff6b6b; color:white; 
+                           border:none; border-radius:5px; font-size:16px; cursor:pointer;'>
+                닫기
+            </button>
+        </div>
+    </div>
+    """.format(img_base64=base64.b64encode(open("Constructionspeed.png", "rb").read()).decode()), 
+    unsafe_allow_html=True)
     
     my_speed = st.number_input("", 0.0, 500.0, 0.0, 0.1, label_visibility="collapsed")
 
@@ -337,6 +349,7 @@ with col_mayor:
         key="mayor_select",
         label_visibility="collapsed"
     )
+
 
 
 
@@ -353,6 +366,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
