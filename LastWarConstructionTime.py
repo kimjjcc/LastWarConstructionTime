@@ -1,14 +1,56 @@
+import streamlit as st
 from datetime import datetime, timedelta
 
-def calculate_build_time(
-    base_days: int,
-    base_hours: int,
-    base_minutes: int,
-    base_seconds: int,
-    my_speed_percent: float,
-    mayor_percent: float
-):
-    # 1. 기본 건설 시간을 초로 변환
+st.set_page_config(
+    page_title="Last War 건설 시간 계산기",
+    page_icon="🏗️",
+    layout="centered"
+)
+
+st.title("🏗️ Last War 건설 시간 계산기")
+st.caption("라스트워 공식: 기본 건설 시간 ÷ (1 + 총 건설 가속 %)")
+
+st.divider()
+
+# ----------------------
+# 입력 영역
+# ----------------------
+st.subheader("🔧 입력값")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    base_days = st.number_input("기본 건설 일수 (Days)", min_value=0, value=0)
+    base_hours = st.number_input("기본 건설 시간 (Hours)", min_value=0, max_value=23, value=0)
+
+with col2:
+    base_minutes = st.number_input("기본 건설 분 (Minutes)", min_value=0, max_value=59, value=0)
+    base_seconds = st.number_input("기본 건설 초 (Seconds)", min_value=0, max_value=59, value=0)
+
+st.divider()
+
+col3, col4 = st.columns(2)
+
+with col3:
+    my_speed = st.number_input(
+        "나의 건설 속도 (%)",
+        min_value=0.0,
+        max_value=500.0,
+        value=80.0,
+        step=0.1
+    )
+
+with col4:
+    mayor_speed = st.selectbox(
+        "건설 장관 가속 (%)",
+        options=[0.0, 25.0, 50.0],
+        index=2
+    )
+
+# ----------------------
+# 계산 로직
+# ----------------------
+if st.button("🚀 계산하기", use_container_width=True):
     base_seconds_total = (
         base_days * 86400 +
         base_hours * 3600 +
@@ -16,42 +58,36 @@ def calculate_build_time(
         base_seconds
     )
 
-    # 2. 총 건설 가속 계산
-    total_speed = (my_speed_percent + mayor_percent) / 100
+    total_speed = (my_speed + mayor_speed) / 100
     final_seconds = base_seconds_total / (1 + total_speed)
 
-    # 3. timedelta 변환
-    final_duration = timedelta(seconds=int(final_seconds))
+    duration = timedelta(seconds=int(final_seconds))
+    finish_time = datetime.now() + duration
 
-    # 4. 완료 예정 시각
-    finish_time = datetime.now() + final_duration
-
-    return final_duration, finish_time
-
-
-if __name__ == "__main__":
-    # 🔹 예시 입력
-    base_days = 101
-    base_hours = 14
-    base_minutes = 30
-    base_seconds = 0
-
-    my_speed = 82.5      # 나의 건설 속도 %
-    mayor_speed = 50.0   # 건설 장관 %
-
-    duration, finish = calculate_build_time(
-        base_days,
-        base_hours,
-        base_minutes,
-        base_seconds,
-        my_speed,
-        mayor_speed
-    )
-
-    # 🔹 결과 출력
     days = duration.days
     hours, remainder = divmod(duration.seconds, 3600)
     minutes, seconds = divmod(remainder, 60)
 
-    print(f"[최종 건설 시간] {days}D {hours:02}:{minutes:02}:{seconds:02}")
-    print(f"[완료 예정 시각] {finish.strftime('%Y-%m-%d %H:%M:%S')}")
+    st.success("✅ 계산 완료!")
+
+    st.metric(
+        label="⏱️ 최종 건설 시간",
+        value=f"{days}D {hours:02}:{minutes:02}:{seconds:02}"
+    )
+
+    st.metric(
+        label="📅 완료 예정 시각",
+        value=finish_time.strftime("%Y-%m-%d %H:%M:%S")
+    )
+
+    st.caption("※ 완료 예정 시각은 계산 버튼을 누른 시점을 기준으로 합니다.")
+
+# ----------------------
+# 설명 영역
+# ----------------------
+st.divider()
+st.subheader("📘 계산 공식 설명")
+
+st.markdown("""
+**최종 건설 시간 계산식**
+
