@@ -27,7 +27,7 @@ st.set_page_config(
 )
 
 # 이미지와 제목을 같은 줄, 수직 가운데 정렬, 간격 최소화
-col1, col2 = st.columns([1, 5])
+col1, col2 = st.columns([1, 8])
 
 with col1:
     st.image("lastwarg.png", width=55, output_format="auto")
@@ -348,6 +348,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
