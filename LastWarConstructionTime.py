@@ -306,7 +306,16 @@ st.subheader("⚡ 건설 가속")
 col_speed, col_mayor = st.columns(2)
 
 with col_speed:
-    st.markdown("<p style='font-size:20px; font-weight:bold; margin:3px;'>나의 건설 속도</p>", unsafe_allow_html=True)
+    col_label, col_help = st.columns([3, 1])
+    with col_label:
+        st.markdown("<p style='font-size:20px; font-weight:bold; margin:3px;'>나의 건설 속도</p>", unsafe_allow_html=True)
+    with col_help:
+        st.markdown("""
+        <p style='font-size:16px; margin:3px; cursor:pointer; color:#666;'>
+        <img src="data:image/png;base64,{img_base64}" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;">
+        확인방법?</p>
+        """.format(img_base64=img_to_base64("Constructionspeed.png")), unsafe_allow_html=True)
+    
     my_speed = st.number_input("", 0.0, 500.0, 0.0, 0.1, label_visibility="collapsed")
 
 with col_mayor:
@@ -314,12 +323,10 @@ with col_mayor:
     mayor = st.selectbox(
         "",
         ["건설장관 50%", "과학부장 25%"],
-        index=0,  # 기본값: 건설장관 50%
+        index=0,
         key="mayor_select",
         label_visibility="collapsed"
     )
-
-
 
 if st.button("🚀 계산하기", use_container_width=True):
     base_sec = d*86400 + h*3600 + m*60 + s
@@ -334,6 +341,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
