@@ -28,7 +28,7 @@ st.set_page_config(
 # 이미지와 제목을 같은 줄에 배치
 col1, col2 = st.columns([1, 8])
 with col1:
-    st.image("lastwarg.png", width=64)
+    st.image("lastwarg.png", width=50)
 with col2:
     st.markdown("## Last War 건설 시간 계산기")
 
@@ -275,6 +275,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
