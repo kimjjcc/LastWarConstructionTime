@@ -2,6 +2,20 @@ import streamlit as st
 from datetime import datetime, timedelta
 
 # ----------------------
+# 유틸 함수
+# ----------------------
+def to_million(value: int) -> str:
+    """
+    숫자를 M 단위 문자열로 변환
+    예: 1_900_000 -> 1.9M
+        110_000_000 -> 110M
+    """
+    m = value / 1_000_000
+    if m.is_integer():
+        return f"{int(m)}M"
+    return f"{m:.1f}M"
+
+# ----------------------
 # 페이지 설정
 # ----------------------
 st.set_page_config(
@@ -23,10 +37,6 @@ st.divider()
 
 # ----------------------
 # 데이터 테이블
-# ----------------------
-# time: (days, hours, minutes, seconds)  ← 네가 정리한 정확한 값
-# resource: (iron, food, gold)
-# require: (요구1, 요구2)
 # ----------------------
 BUILD_DATA_TABLE = {
     "본부(Headquarters)": {
@@ -141,10 +151,7 @@ st.subheader("🛠️ 업그레이드 선택")
 col1, col2 = st.columns(2)
 
 with col1:
-    building_type = st.selectbox(
-        "건물 선택",
-        BUILD_DATA_TABLE.keys()
-    )
+    building_type = st.selectbox("건물 선택", BUILD_DATA_TABLE.keys())
 
 with col2:
     building_step = st.selectbox(
@@ -167,9 +174,9 @@ st.caption(
 )
 
 col_r1, col_r2, col_r3 = st.columns(3)
-col_r1.metric("⛏️ 철", f"{iron:,}")
-col_r2.metric("🌾 식량", f"{food:,}")
-col_r3.metric("🪙 골드", f"{gold:,}")
+col_r1.metric("⛏️ 철", to_million(iron))
+col_r2.metric("🌾 식량", to_million(food))
+col_r3.metric("🪙 골드", to_million(gold))
 
 st.markdown(
     f"**📌 요구 조건**  \n"
@@ -245,5 +252,5 @@ st.subheader("📘 계산 공식")
 st.markdown(
     "**최종 건설 시간 = 기본 건설 시간 ÷ (1 + 총 건설 가속 %)**\n\n"
     "- 총 건설 가속 % = 나의 건설 속도 + 건설 장관 가속\n"
-    "- 자원 소모량은 가속 여부와 무관"
+    "- 자원은 항상 M 단위로 표기됨"
 )
