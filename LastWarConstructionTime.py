@@ -86,13 +86,6 @@ data = levels[level]
 d, h, m, s = data["time"]
 
 # ----------------------
-# 기본 건설 시간 (미리보기)
-# ----------------------
-st.markdown(
-    f"**⏱️ 기본 건설 시간:** {format_time(d, h, m, s)}"
-)
-
-# ----------------------
 # 본부 전용 정보
 # ----------------------
 if building.startswith("본부"):
@@ -111,10 +104,10 @@ if building.startswith("본부"):
         r1, r2, r3 = st.columns([0.7, 0.7, 0.7])
 
         with r1:
-            st.image("iron.png", width=36)
+            st.image("iron.png", width=50)
             st.markdown(to_million(iron))
         with r2:
-            st.image("food.png", width=36)
+            st.image("food.png", width=40)
             st.markdown(to_million(food))
         with r3:
             st.image("gold.png", width=36)
@@ -160,3 +153,4 @@ if st.button("🚀 계산하기", use_container_width=True):
         "📅 완료 예정 시각",
         end_time.strftime("%Y-%m-%d %H:%M:%S")
     )
+
