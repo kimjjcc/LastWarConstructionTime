@@ -106,11 +106,37 @@ data = levels[level]
 d, h, m, s = data["time"]
 
 # ----------------------
-# 본부 전용 정보
+# 자원 / 요구조건 표시
 # ----------------------
-if building.startswith("본부"):
+if "res" in data:
     iron, food, gold = data["res"]
-    req1, req2 = map(add_space, data["req"])
+
+    reqs = data.get("req", [])
+    reqs = [add_space(r) for r in reqs]
+
+    st.divider()
+    col_res, col_req = st.columns([3, 2])
+
+    with col_res:
+        st.subheader("📦 필요 자원")
+        r1, r2, r3 = st.columns([0.7, 0.7, 0.7])
+
+        with r1:
+            st.image("iron.png", width=40)
+            st.markdown(to_million(iron))
+        with r2:
+            st.image("food.png", width=40)
+            st.markdown(to_million(food))
+        with r3:
+            st.image("gold.png", width=40)
+            st.markdown(to_million(gold))
+
+    if reqs:
+        with col_req:
+            st.subheader("📌 요구 조건")
+            for r in reqs:
+                st.markdown(f"- {r}")
+
 
     st.divider()
 
@@ -173,6 +199,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         "📅 완료 예정 시각",
         end_time.strftime("%Y-%m-%d %H:%M:%S")
     )
+
 
 
 
