@@ -229,30 +229,43 @@ BUILDING_DATA = {
 }
 
 # ----------------------
+# 건물 / 레벨 선택
+# ----------------------
+# ----------------------
 # 건물 / 레벨 선택 (좌우 배치)
 # ----------------------
 st.markdown("""
 <style>
 [data-baseweb="select"] { margin-top: 0px !important; margin-bottom: 0px !important; }
 .element-container { padding-bottom: 0rem !important; }
-.building-col, .level-col { padding: 0 10px; }
 </style>
-<div style='display: flex; gap: 20px; align-items: flex-start;'>
-  <div class='building-col'>
-    <p style='font-size:25px; font-weight:bold; margin:3px;'>🛠️ 건물 선택</p>
-  """, unsafe_allow_html=True)
-
-building = st.selectbox("", BUILDING_DATA.keys(), key="building", label_visibility="collapsed")
-
-st.markdown("""
-  </div>
-  <div class='level-col'>
-    <p style='font-size:25px; font-weight:bold; margin:3px;'>레벨 구간</p>
-  </div>
-</div>
 """, unsafe_allow_html=True)
 
-level = st.selectbox("", list(BUILDING_DATA[building].keys())[::-1], key="level", label_visibility="collapsed")
+col_building, col_level = st.columns(2)
+
+with col_building:
+    st.markdown(
+        "<p style='font-size:25px; font-weight:bold; margin:3px;'>🛠️ 건물 선택</p>",
+        unsafe_allow_html=True
+    )
+    building = st.selectbox(
+        "",
+        BUILDING_DATA.keys(),
+        key="building",
+        label_visibility="collapsed"
+    )
+
+with col_level:
+    st.markdown(
+        "<p style='font-size:25px; font-weight:bold; margin:3px;'>레벨 구간</p>",
+        unsafe_allow_html=True
+    )
+    level = st.selectbox(
+        "",
+        list(BUILDING_DATA[building].keys())[::-1],
+        key="level",
+        label_visibility="collapsed"
+    )
 
 data = BUILDING_DATA[building][level]
 d, h, m, s = data["time"]
@@ -307,6 +320,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
