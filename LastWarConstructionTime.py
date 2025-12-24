@@ -66,11 +66,12 @@ with col1:
 with col2:
     building_step = st.selectbox(
         "레벨 구간",
-        list(BUILD_TIME_TABLE[building_type].keys())[::-1]  # 높은 레벨이 위로
+        list(BUILD_TIME_TABLE[building_type].keys())[::-1]  # 높은 레벨이 위
     )
 
-base_days, base_hours, base_minutes, base_seconds = \
+base_days, base_hours, base_minutes, base_seconds = (
     BUILD_TIME_TABLE[building_type][building_step]
+)
 
 st.caption(
     f"선택된 기본 건설 시간: "
@@ -140,7 +141,19 @@ if st.button("🚀 계산하기", use_container_width=True):
 # 설명 영역
 # ----------------------
 st.divider()
-st.subheader("📘 계산 공식")
+st.subheader("📘 계산 공식 설명")
 
 st.markdown(
-    """
+    "**최종 건설 시간 계산식**\n\n"
+    "```\n"
+    "최종 건설 시간 = 기본 건설 시간 ÷ (1 + 총 건설 가속 %)\n"
+    "```\n\n"
+    "- 총 건설 가속 % = 나의 건설 속도 + 건설 장관 가속\n"
+    "- 모든 가속은 단순 합산 방식\n"
+    "- 건설은 시작 시점 기준으로 계산됨"
+)
+
+st.info(
+    "⚠️ 게임 내 UI에 표시되는 가속 수치와 실제 적용 가속은 "
+    "차이가 있을 수 있습니다."
+)
