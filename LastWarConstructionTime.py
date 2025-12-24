@@ -42,11 +42,9 @@ with col2:
         unsafe_allow_html=True
     )
 
-st.markdown(
-    '<p style="margin:5; font-size:14px; color:gray;">건물 업그레이드 시간 · 자원 · 완료 시각 계산</p>'
-    '<hr style="margin:0; border:1px solid #ddd;">',
-    unsafe_allow_html=True
-)
+<p style="margin:0 0 5px 0; font-size:14px; color:gray;">건물 업그레이드 시간 · 자원 · 완료 시각 계산</p>
+<hr style="margin:5px 0; border:1px solid #ddd;">
+
 
 # ----------------------
 # 데이터
@@ -339,6 +337,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
