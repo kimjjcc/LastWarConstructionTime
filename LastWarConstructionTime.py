@@ -328,9 +328,16 @@ with col_mayor:
     )
 
 
+import re
+
 if st.button("🚀 계산하기", use_container_width=True):
     base_sec = d*86400 + h*3600 + m*60 + s
-    final_sec = base_sec / (1 + (my_speed + mayor)/100)
+
+    # mayor에서 숫자 추출
+    mayor_percent = int(re.search(r'\d+', mayor).group())
+
+    # 계산
+    final_sec = base_sec / (1 + (my_speed + mayor_percent)/100)
     dur = timedelta(seconds=int(final_sec))
     end_time = datetime.now() + dur
 
@@ -341,67 +348,5 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
