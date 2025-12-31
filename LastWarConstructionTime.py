@@ -333,7 +333,7 @@ with col_mayor:
     st.markdown("<p style='font-size:20px; font-weight:bold; margin:3px;'>장관 가속</p>", unsafe_allow_html=True)
     mayor = st.selectbox(
         "",
-        ["건설장관 50%", "과학부장 25%"],
+        ["건설장관 50%", "과학부장 25%", "행정사령관 60%"],
         index=0,  # 기본값: 건설장관 50%
         key="mayor_select",
         label_visibility="collapsed"
@@ -360,6 +360,7 @@ if st.button("🚀 계산하기", use_container_width=True):
         st.metric("⚡ 최종 건설 시간", f"{dur.days}D {dur.seconds//3600:02}:{(dur.seconds%3600)//60:02}:{dur.seconds%60:02}")
 
     st.metric("📅 완료 예정 시각", end_time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 
